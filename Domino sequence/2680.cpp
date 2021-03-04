@@ -37,35 +37,29 @@ int main() {
 
     /* The first index holds the length of the sequence, while the second holds the second number of the
      * latest domino in the sequence */
-    vector <vector <int>> dominoes = { {1, a}, {1, b} };
+    vector <vector<int>> dominoes = { {1, a}, {1, b} };
     for (int i = 1; i < N; i++) {
-        f >> a >> b; s1, s2 = false;
+        f >> a >> b; s1 = 0; s2 = 0;
 
         for (int j = 0; j < dominoes.size(); j++) {
-            vector <int> * d = &dominoes[j]; // Too lazy to write it every time
+            int * l = &dominoes[j][0]; // Length
+            int * d = l + 1; // Too lazy to write array every time
 
             // If two domino tiles can be connected, will do it
-            if ((*d)[1] == a) {
-                
-                (*d)[1] = b; s1 = true;
-
-            } else if ((*d)[1] == b) {
-                
-                (*d)[1] = a; s2 = true;
-
+            if (*d == a) {
+                *d = b; s1 = 1;
+            } else if (*d == b) {
+                *d = a; s2 = 1;
             } else {
-                
                 // If sequesnce can't be continued, will delete it
                 // Before doing so, check its length
-                if ((*d)[0] > max) {
-                    max = (*d)[0];
-                }
+                max = (*l > max) ? *l : max;
 
                 dominoes.erase(dominoes.begin() + j);
                 j--; continue;
             }
 
-            (*d)[0]++;
+            (*l)++;
         }
 
         /* Will start a new sequence only if domino tile isn't a part of existsing sequence */
@@ -75,9 +69,7 @@ int main() {
 
     // Check lengths of the remaining sequences
     for (int c : dominoes[0]) {
-        if (c > max) {
-            max = c;
-        }
+        max = (c > max) ? c : max;
     }
 
     cout << max;
